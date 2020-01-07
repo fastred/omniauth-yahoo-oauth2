@@ -5,6 +5,7 @@ module OmniAuth
   module Strategies
     class YahooOauth2 < OmniAuth::Strategies::OAuth2
       option :name, 'yahoo_oauth2'
+      option :authorize_options, %i[ client_id login_hint scope state redirect_uri response_type ]
 
       uid { access_token.params['xoauth_yahoo_guid'] }
 
@@ -63,6 +64,19 @@ module OmniAuth
         email && email["handle"]
       end
 
+      def authorize_params
+        super.tap do |params|
+          options[:authorize_options].each do |k|
+            params[k] = request.params[k.to_s] unless [nil, ''].include?(request.params[k.to_s])
+          end
+
+          options[:authorize_params].each do |k|
+            params[k] = options[:authorize_params][k.to_s]
+          end
+
+          session['omniauth.state'] = params[:state] if params[:state]
+        end
+      end
     end
   end
 end
