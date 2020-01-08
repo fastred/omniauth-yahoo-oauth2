@@ -50,6 +50,11 @@ module OmniAuth
         @raw_info ||= access_token.get(raw_info_url).parsed
       end
 
+      def callback_url
+        return options[:callback_url] if options[:callback_url].is_a?(String)
+        full_host + script_name + callback_path
+      end
+
       private
 
       def prune!(hash)
