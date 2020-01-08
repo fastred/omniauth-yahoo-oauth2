@@ -44,6 +44,7 @@ module OmniAuth
       end
 
       def raw_info
+        # TODO: switch to new API
         raw_info_url =
           "https://social.yahooapis.com/v1/user/#{uid}/profile?format=json"
         @raw_info ||= access_token.get(raw_info_url).parsed
