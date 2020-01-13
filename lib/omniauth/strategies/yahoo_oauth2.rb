@@ -50,6 +50,10 @@ module OmniAuth
         @raw_info ||= access_token.get(raw_info_url).parsed
       end
 
+      def callback_url
+        full_host + script_name + callback_path
+      end
+  
       private
 
       def prune!(hash)
